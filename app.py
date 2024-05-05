@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from models import DataTable
+from dataTable import DataTable
 
 class DataApp:
     def __init__(self, root):
