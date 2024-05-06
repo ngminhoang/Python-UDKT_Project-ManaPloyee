@@ -1,36 +1,34 @@
-ID,Name,Phone Number,Email,Role,Revenue,Working Month Count,Manage Group,Employee Count,Total Revenue
-1,hoang,123,q,1,,,,,
-2,ang,456,w,,,,,,
-3,qu,324,a,1,,,,,
-4,ku,134,d,,,,,,
-ID,Name,Phone Number,Email,Role,Revenue,Working Month Count
-ID,Name,Phone Number,Email,Role,Revenue,Working Month Count
-5,5,5,5,False,12,12,,,
-6,6,6,6,0,12,12,,,
-5,5,5,5,0,12,12,,,
-5,5,5,5,0,12,12,,,
-7,77,7,7,0,12,12,,,
-fzsffdsz,fdsz,zdfx,fz,0,12,12,,,
-7676767,676,76,7676,0,12,12,,,
-12133,213,312,321,1,,,NOT USED,NOT USED,NOT USED
-yyyy,yy,y,y,0,y,y,,,
-z,z,z,z,0,z,z,,,
-w,w,w,w,0,NOT USED,NOT USED,,,
-q,q,q,qq,1,,,NOT USED,NOT USED,NOT USED
-qe,qe,qe,qqe,1,,,e,ee,eee
-2222222222222,2222222222222,2222222222222,2222222222222,0,2222222222222,2222222222222,,,
-3333,3333,3333,3333,0,NOT USED,NOT USED,,,
-5,5,5,55,0,NOT USED,NOT USED,,,
-8,88,88,8,1,,,8,8,8
-sad,asd,dsa,sda,0,NOT USED,NOT USED,,,
-czx,cxz,cxz,xcz,0,NOT USED,NOT USED,,,
-cxz,cxz,xzc,xzcxzc,0,NOT USED,NOT USED,,,
-das,asd,dsa,dsa,0,NOT USED,NOT USED,,,
-v,dsvds,dsv,vdssdv,1,,,vds,dvs,vds
-132,321,321321,213321,0,213,321321,,,
-213,241,41322144,124,1,,,421,41242113,412
-dsa,dasdsa,dsas,sad,1,,,asd,dsad,das
-878,87,87,8787,0,878,8787,,,
-878,87,87,8787,1,,,786,876,876876
-ads,dsa,dsadsa,dsa,1,,,sad,dsadsa,dsa
-z,z,z,z,0,z,z,,,
+ID,Name,Phone Number,Email,Role,Revenue,Working Month Count,Manage Group,Employee Count,Total Revenue,Delete
+1,hoang,123,q,1,,,,,,
+3,qu,324,a,1,,,,,,
+4,ku,134,d,,,,,,,
+ID,Name,Phone Number,Email,Role,Revenue,Working Month Count,,,,
+ID,Name,Phone Number,Email,Role,Revenue,Working Month Count,,,,
+5,5,5,5,FALSE,12,12,,,,
+6,6,6,6,0,12,12,,,,
+5,5,5,5,0,12,12,,,,
+5,5,5,5,0,12,12,,,,
+7,77,7,7,0,12,12,,,,
+fzsffdsz,fdsz,zdfx,fz,0,12,12,,,,
+7676767,676,76,7676,0,12,12,,,,
+12133,213,312,321,1,,,NOT USED,NOT USED,NOT USED,
+yyyy,yy,y,y,0,y,y,,,,
+w,w,w,w,0,NOT USED,NOT USED,,,,
+q,q,q,qq,1,,,NOT USED,NOT USED,NOT USED,
+qe,qe,qe,qqe,1,,,e,ee,eee,
+3333,3333,3333,3333,0,NOT USED,NOT USED,,,,
+5,5,5,55,0,NOT USED,NOT USED,,,,
+8,88,88,8,1,,,8,8,8,
+sad,asd,dsa,sda,0,NOT USED,NOT USED,,,,
+czx,cxz,cxz,xcz,0,NOT USED,NOT USED,,,,
+cxz,cxz,xzc,xzcxzc,0,NOT USED,NOT USED,,,,
+das,asd,dsa,dsa,0,NOT USED,NOT USED,,,,
+v,dsvds,dsv,vdssdv,1,,,vds,dvs,vds,
+132,321,321321,213321,0,213,321321,,,,
+213,241,41322144,124,1,,,421,41242113,412,
+dsa,dasdsa,dsas,sad,1,,,asd,dsad,das,
+878,87,87,8787,0,878,8787,,,,
+878,87,87,8787,1,,,786,876,876876,
+ads,dsa,dsadsa,dsa,1,,,sad,dsadsa,dsa,
+2,ang,456,w,0,yyyy,9--09-90-09-,,,,
+z,jbkh,z,z,0,z,z,,,,

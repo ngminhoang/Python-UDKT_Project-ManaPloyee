@@ -76,7 +76,6 @@ class DataApp:
     
     def update_record(self):
         id_value = self.input_fields["ID"].get()
-        id_value = self.input_fields["ID"].get()
         name_value = self.input_fields["Name"].get()
         phone_value = self.input_fields["Phone Number"].get()
         email_value = self.input_fields["Email"].get()
@@ -99,14 +98,21 @@ class DataApp:
             staff = create_employee_from_list(values)
 
         self.controller.editStaff(id_value,staff)
+        self.reload_tree_data()
 
 
 
     def delete_record(self):
-        print()
+        id_value = self.input_fields["ID"].get()
+        self.controller.deleteStaff(id_value,True)
+        self.reload_tree_data()
+        self.reset_record()
 
     def lock_record(self):
-        print()
+        id_value = self.input_fields["ID"].get()
+        self.controller.deleteStaff(id_value,False)
+        self.reload_tree_data()
+        self.reset_record()
 
     def reset_record(self):
         self.enable_button_read()
@@ -189,6 +195,7 @@ class DataApp:
             self.tree.delete(item)
     
     def reload_tree_data(self):
+        self.clear_tree()
         self.data = self.controller.getData()
         for record in self.data:
             values = [
