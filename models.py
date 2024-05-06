@@ -51,3 +51,13 @@ def create_employee_from_list(values):
     id_value, name_value, phone_value, email_value, role_value, revenue, working_month_count = values
     employee = Employee(id_value, name_value, phone_value, email_value, revenue, working_month_count)
     return employee
+
+def create_manager_from_list(values):
+    """
+    Create an Employee object from a list of values.
+    Expected order of values: [id, name, phone_number, email, role]
+    """
+   
+    id_value, name_value, phone_value, email_value, role_value, total_revenue, manage_group, employee_count = values
+    employee = Manager(id_value, name_value, phone_value, email_value, manage_group, employee_count, total_revenue)
+    return employee
