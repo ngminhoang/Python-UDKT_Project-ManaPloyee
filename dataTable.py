@@ -27,7 +27,7 @@ class DataTable:
         self.data = updated_data
         self.save_data()
 
-    def add_row(self, obj):
+    def add_row(self, obj: Employee | Manager):
         if isinstance(obj, Employee):
             new_record = {
                 'ID': obj.id,
