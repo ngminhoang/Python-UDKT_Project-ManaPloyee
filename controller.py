@@ -10,7 +10,7 @@ class ManageEmployee:
     def addNewStaff(self, staff):
         self.__data.add_row(staff)
 
-    def editStaff(self, staffId: int, newStaff):
+    def editStaff(self, staffId, newStaff):
         self.__data.delete_record_by_id(staffId)
         self.__data.add_row(newStaff)
 

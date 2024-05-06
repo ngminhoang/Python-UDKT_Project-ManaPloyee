@@ -75,7 +75,32 @@ class DataApp:
         self.reset_button.grid(row=len(labels) + 7, column=0, columnspan=2, pady=10)
     
     def update_record(self):
-        print()
+        id_value = self.input_fields["ID"].get()
+        id_value = self.input_fields["ID"].get()
+        name_value = self.input_fields["Name"].get()
+        phone_value = self.input_fields["Phone Number"].get()
+        email_value = self.input_fields["Email"].get()
+        role_value = self.role_var.get()
+        revenue_value = self.input_fields["Revenue"].get()
+        working_month_value = self.input_fields["Working Month"].get()
+        total_revenue_value = self.input_fields["Total Revenue"].get()
+        manage_group_value = self.input_fields["Manage Group"].get()
+        employee_count_value = self.input_fields["Employee Count"].get()
+
+        if not id_value or not name_value:
+            tk.messagebox.showerror("Error", "ID and Name are required fields.")
+            return
+
+        if(role_value=='Manager'):
+            values = [id_value, name_value, phone_value, email_value, "Manager",total_revenue_value,manage_group_value,employee_count_value]
+            staff = create_manager_from_list(values)
+        else:
+            values = [id_value, name_value, phone_value, email_value, "Employee",revenue_value,working_month_value]
+            staff = create_employee_from_list(values)
+
+        self.controller.editStaff(id_value,staff)
+
+
 
     def delete_record(self):
         print()
@@ -159,10 +184,26 @@ class DataApp:
             self.tree.insert("", tk.END, values=values)
         self.tree.bind("<ButtonRelease-1>", self.on_row_click)
 
+    def clear_tree(self):
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+    
+    def reload_tree_data(self):
+        self.data = self.controller.getData()
+        for record in self.data:
+            values = [
+                record.get("ID", ""),
+                record.get("Name", ""),
+                record.get("Phone Number", ""),
+                record.get("Email", ""),
+                "Manager" if record.get("Role", "") == "1" else "Employee"
+            ]
+            self.tree.insert("", tk.END, values=values)
+
     def on_row_click(self, event):
         self.enable_button_writing()
-        item = self.tree.selection()[0]  # Get the selected item
-        values = self.tree.item(item, "values")  # Get the values of the selected item
+        item = self.tree.selection()[0]
+        values = self.tree.item(item, "values")
         print("Selected values:", values[4])
         self.input_fields["ID"].delete(0, tk.END)
         self.input_fields["ID"].insert(0, values[0])
