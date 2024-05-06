@@ -1,4 +1,4 @@
-import csv
+
 
 class Staff:
     def __init__(self, staff_id, name, phone_number, email, role):
@@ -40,3 +40,14 @@ class Employee(Staff):
         super().display_info()
         print(f"Revenue: ${self.revenue}")
         print(f"Working Month Count: {self.workingMonthCount}")
+
+
+def create_employee_from_list(values):
+    """
+    Create an Employee object from a list of values.
+    Expected order of values: [id, name, phone_number, email, role]
+    """
+   
+    id_value, name_value, phone_value, email_value, role_value, revenue, working_month_count = values
+    employee = Employee(id_value, name_value, phone_value, email_value, revenue, working_month_count)
+    return employee
