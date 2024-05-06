@@ -73,6 +73,9 @@ class DataApp:
 
         self.reset_button = tk.Button(self.left_frame, text="Reset", command=self.reset_record)
         self.reset_button.grid(row=len(labels) + 7, column=0, columnspan=2, pady=10)
+
+        self.reset_button = tk.Button(self.left_frame, text="Caculate", command=self.reset_record)
+        self.reset_button.grid(row=len(labels) + 9, column=0, columnspan=2, pady=10)
     
     def update_record(self):
         id_value = self.input_fields["ID"].get()
