@@ -121,18 +121,25 @@ class DataApp:
         email_value = self.input_fields["Email"].get()
         role_value = self.role_var.get()
 
+        ren = self.input_fields["Revenue"].get()
+        w_month = self.input_fields["Working Month"].get()
+        total_ren = self.input_fields["Total Revenue"].get()
+        manage_group = self.input_fields["Manage Group"].get()
+        empl_count = self.input_fields["Employee Count"].get()
+
         if not id_value or not name_value:
-            tk.messagebox.showerror("Error", "ID and Name are required fields.")
+            # TODO: Loi o day
+            # tk.messagebox.showerror("Error", "ID and Name are required fields.")
             return
 
-        if(role_value==0):
-            values = [id_value, name_value, phone_value, email_value, role_value,12,12]
+        if(role_value!="Manager"):
+            values = [id_value, name_value, phone_value, email_value, role_value, ren, w_month]
+            staff = create_employee_from_list(values)
         else:
-            values = [id_value, name_value, phone_value, email_value, role_value,12,12]
-        staff = create_employee_from_list(values)
-        self.controller.addNewStaff( staff)
+            values = [id_value, name_value, phone_value, email_value, role_value, total_ren, manage_group, empl_count]
+            staff = create_manager_from_list(values)
+        self.data_table.add_row(staff)
         self.tree.insert("", tk.END, values=values)
-
 
 
 def main():
