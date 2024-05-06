@@ -3,10 +3,14 @@ from dataTable import DataTable
 
 class ManageEmployee:
     __data = DataTable()
-    def addNewStaff(self, staff: Employee | Manager):
+
+    def getData(self):
+        return self.__data.get_data()
+
+    def addNewStaff(self, staff):
         self.__data.add_row(staff)
 
-    def editStaff(self, staffId: int, newStaff: Employee | Manager):
+    def editStaff(self, staffId: int, newStaff):
         self.__data.delete_record_by_id(staffId)
         self.__data.add_row(newStaff)
 

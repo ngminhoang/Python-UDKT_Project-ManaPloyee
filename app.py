@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from dataTable import DataTable
 from models import *
+from controller import *
 
 class DataApp:
     def __init__(self, root):
@@ -9,8 +10,8 @@ class DataApp:
         self.root.title("ManaPloyees")
 
         
-        self.data_table = DataTable()
-        self.data = self.data_table.get_data()
+        self.controller = ManageEmployee()
+        self.data = self.controller.getData()
 
         
         left_frame_width = 1400*0.2
@@ -129,7 +130,7 @@ class DataApp:
         else:
             values = [id_value, name_value, phone_value, email_value, role_value,12,12]
         staff = create_employee_from_list(values)
-        self.data_table.add_row( staff)
+        self.controller.addNewStaff( staff)
         self.tree.insert("", tk.END, values=values)
 
 
