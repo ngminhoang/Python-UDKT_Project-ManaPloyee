@@ -1,6 +1,6 @@
 import csv
 from models import *
-from csv import writer
+
 class DataTable:
     def __init__(self):
         self.data = []
