@@ -1,14 +1,13 @@
-ID,Name,Phone Number,Email,Role,Revenue,Working Month Count,Manage Group,Employee Count,Total Revenue
-1,hoang,123,q,1,,,,,
-2,ang,456,w,,,,,,
-3,qu,324,a,1,,,,,
-4,ku,134,d,,,,,,
-ID,Name,Phone Number,Email,Role,Revenue,Working Month Count
-ID,Name,Phone Number,Email,Role,Revenue,Working Month Count
-5,5,5,5,False,12,12,,,
-6,6,6,6,0,12,12,,,
-5,5,5,5,0,12,12,,,
-5,5,5,5,0,12,12,,,
-7,77,7,7,0,12,12,,,
-fzsffdsz,fdsz,zdfx,fz,0,12,12,,,
-7676767,676,76,7676,0,12,12,,,
+ID,Name,Phone Number,Email,Role,Revenue,Working Month Count,Manage Group,Employee Count,Total Revenue, isDelete
+1,hoang,123,q,1,,,,,,
+2,ang,456,w,,,,,,,
+3,qu,324,a,1,,,,,,
+4,ku,134,d,,,,,,,
+5,5,5,5,False,12,12,,,,
+6,6,6,6,0,12,12,,,,
+5,5,5,5,0,12,12,,,,
+5,5,5,5,0,12,12,,,,
+7,77,7,7,0,12,12,,,,
+fzsffdsz,fdsz,zdfx,fz,0,12,12,,,,
+abc,abc,sdgsdg,asfs,0,12,12,,,,
+abc,abc,sdgsdg,asfs,0,12,12,,,,
