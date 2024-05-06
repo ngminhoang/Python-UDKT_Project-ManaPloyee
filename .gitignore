@@ -1,2 +1,7 @@
 .data/data.csv
 /__pycache__
+__pycache__/dataTable.cpython-312.pyc
+__pycache__/models.cpython-312.pyc
+__pycache__/*
+*.pyc
+
