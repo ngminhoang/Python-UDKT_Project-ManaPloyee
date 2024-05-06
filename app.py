@@ -5,7 +5,6 @@ from models import *
 
 class DataApp:
     def __init__(self, root):
-        
         self.root = root
         self.root.title("ManaPloyees")
 
@@ -26,7 +25,7 @@ class DataApp:
         self.right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         
-        self.display_table(1)
+        self.display_table()
 
         
         self.create_input_fields()
@@ -34,148 +33,97 @@ class DataApp:
 
 
     def create_input_fields(self):
+        labels = ["ID", "Name", "Phone Number", "Email", "Revenue", "Working Month", "Total Revenue", "Manage Group", "Employee Count"]
+        self.input_fields = {}
+        
+        for idx, label_text in enumerate(labels):
+            label = tk.Label(self.left_frame, text=label_text + ":", anchor=tk.E, padx=5)
+            label.grid(row=idx, column=0, sticky=tk.E)
+            entry = tk.Entry(self.left_frame)
+            entry.grid(row=idx, column=1, padx=5, pady=5, sticky=tk.W)
+            self.input_fields[label_text] = entry
+        
+        for field in ["Total Revenue", "Manage Group", "Employee Count"]:
+                self.input_fields[field].delete(0, tk.END)
+                self.input_fields[field].insert(0, "NOT USED") 
+                self.input_fields[field].config(state=tk.DISABLED)
 
-    # Labels and corresponding entry fields
-        labels = ["ID", "Name", "Phone Number", "Email"]
-
-        # Button to show all records
-        show_all_button = tk.Button(self.left_frame, text="Show All", command=lambda: self.show_table(0))
-        show_all_button.grid(row=len(labels) + 1, column=0, columnspan=2, pady=10)
-
-        # Button to show employees
-        show_employees_button = tk.Button(self.left_frame, text="Show Employees", command=lambda: self.show_table(1))
-        show_employees_button.grid(row=len(labels) + 2, column=0, columnspan=2, pady=10)
-
-        # Button to show managers
-        show_managers_button = tk.Button(self.left_frame, text="Show Managers", command=lambda: self.show_table(2))
-        show_managers_button.grid(row=len(labels) + 3, column=0, columnspan=2, pady=10)
-
-        # Button to add a new record
+        role_label = tk.Label(self.left_frame, text="Role:", anchor=tk.E, padx=5)
+        role_label.grid(row=len(labels), column=0, sticky=tk.E)
+        
+        self.role_var = tk.StringVar(self.left_frame)
+        self.role_var.set("Employee")
+        roles = ["Employee", "Manager"]
+        
+        role_menu = tk.OptionMenu(self.left_frame, self.role_var, *roles, command=self.on_role_change)
+        role_menu.grid(row=len(labels), column=1, padx=5, pady=5, sticky=tk.W)
+        
         add_button = tk.Button(self.left_frame, text="Add Record", command=self.add_record)
-        add_button.grid(row=len(labels) + 4, column=0, columnspan=2, pady=10)
-
-
-    def show_table(self, display_type):
-        """
-        Display table based on the specified display type:
-        - display_type 0: Show all records
-        - display_type 1: Show employees
-        - display_type 2: Show managers
-        """
-        self.data = self.data_table.get_data()
-        self.display_table(display_type)
+        add_button.grid(row=len(labels) + 1, column=0, columnspan=2, pady=10)
     
+    def on_role_change(self, *args):
+        selected_role = self.role_var.get()
 
-    def display_table(self,type):
-        try:
-            self.clear_tree()
-            self.tree.delete(*self.tree.get_children())
-        except:
-            x=1
-        if type == 0:
-            self.tree = ttk.Treeview(self.right_frame, columns=("ID", "Name", "Phone Number", "Email", "Role"), show="headings")
-            self.tree.pack(fill=tk.BOTH, expand=True)
-            headers = ["ID", "Name", "Phone Number", "Email", "Role"]
+        if selected_role == "Employee":
+            for field in ["Revenue", "Working Month"]:
+                self.input_fields[field].config(state=tk.NORMAL)
+                self.input_fields[field].delete(0, tk.END)
+                self.input_fields[field].insert(0, "") 
 
-            for header in headers:
-                self.tree.heading(header, text=header, command=lambda h=header: self.sort_by_column(h))
-                self.tree.column(header, anchor=tk.CENTER)
+            for field in ["Total Revenue", "Manage Group", "Employee Count"]:
+                self.input_fields[field].delete(0, tk.END)
+                self.input_fields[field].insert(0, "NOT USED") 
+                self.input_fields[field].config(state=tk.DISABLED)
 
-            for record in self.data:
-                values = [
-                    record.get("ID", ""),
-                    record.get("Name", ""),
-                    record.get("Phone Number", ""),
-                    record.get("Email", ""),
-                    "Manager" if record.get("Role", False) else "Employee"
-                ]
-                self.tree.insert("", tk.END, values=values)
-        
-        elif type == 1:
-            self.tree = ttk.Treeview(self.right_frame, columns=("ID", "Name", "Phone Number", "Email", "Revenue", "Working Month Count"), show="headings")
-            self.tree.pack(fill=tk.BOTH, expand=True)
-            headers = ["ID", "Name", "Phone Number", "Email", "Revenue", "Working Month Count"]
-            
-            for header in headers:
-                self.tree.heading(header, text=header, command=lambda h=header: self.sort_by_column(h))
-                self.tree.column(header, anchor=tk.CENTER)
+        elif selected_role == "Manager":
+            for field in ["Total Revenue", "Manage Group", "Employee Count"]:
+                self.input_fields[field].config(state=tk.NORMAL)
+                self.input_fields[field].delete(0, tk.END)
+                self.input_fields[field].insert(0, "") 
 
-            for record in self.data:
-                if record.get("Role", "")!="1":
-                    values = [
-                        record.get("ID", ""),
-                        record.get("Name", ""),
-                        record.get("Phone Number", ""),
-                        record.get("Email", ""),
-                        record.get("Revenue", ""),
-                        record.get("Working Month Count", "")
-                    ]
-                    self.tree.insert("", tk.END, values=values)
+            for field in ["Revenue", "Working Month"]:
+                self.input_fields[field].delete(0, tk.END)
+                self.input_fields[field].insert(0, "NOT USED")
+                self.input_fields[field].config(state=tk.DISABLED)
 
-        elif type == 2:
-            self.tree = ttk.Treeview(self.right_frame, columns=("ID", "Name", "Phone Number", "Email", "Manage Group", "Employee Count","Total Revenue"), show="headings")
-            self.tree.pack(fill=tk.BOTH, expand=True)
-            headers = ["ID", "Name", "Phone Number", "Email", "Manage Group", "Employee Count","Total Revenue"]
-            
-            for header in headers:
-                self.tree.heading(header, text=header, command=lambda h=header: self.sort_by_column(h))
-                self.tree.column(header, anchor=tk.CENTER)
+    def display_table(self):
+        self.tree = ttk.Treeview(self.right_frame, columns=("ID", "Name", "Phone Number", "Email", "Role"), show="headings")
+        self.tree.pack(fill=tk.BOTH, expand=True)
 
-            for record in self.data:
-                if record.get("Role", "")=="1":
-                    values = [
-                        record.get("ID", ""),
-                        record.get("Name", ""),
-                        record.get("Phone Number", ""),
-                        record.get("Email", ""),
-                        record.get("Manage Group", ""),
-                        record.get("Employee Count", ""),
-                        record.get("Total Revenue", "")
-                    ]
-                    self.tree.insert("", tk.END, values=values)
+        headers = ["ID", "Name", "Phone Number", "Email", "Role"]
+        for header in headers:
+            self.tree.heading(header, text=header, command=lambda h=header: self.sort_by_column(h))
+            self.tree.column(header, anchor=tk.CENTER)
 
-
-    def clear_tree(self):
-        """
-        Clear all items from the treeview.
-        """
-        # self.root.delete()
-        for item in self.tree.get_children():
-            self.tree.delete(item)
-
-    def show_All(self):
-        
-        self.data = self.data_table.get_data()
-        self.display_table(0)
+        for record in self.data:
+            values = [
+                record.get("ID", ""),
+                record.get("Name", ""),
+                record.get("Phone Number", ""),
+                record.get("Email", ""),
+                "Manager" if record.get("Role", False) else "Employee"
+            ]
+            self.tree.insert("", tk.END, values=values)
 
     def sort_by_column(self, header):
-        """
-        Sort treeview data by the specified column header.
-        """
-        # Get current treeview items
         items = list(self.tree.get_children(""))
 
-        # Sort items based on column values
         items.sort(key=lambda item: self.tree.set(item, header))
 
-        # Rearrange treeview items
         for index, item in enumerate(items):
             self.tree.move(item, "", index)
     
     def add_record(self):
-        # Retrieve input field values
         id_value = self.input_fields["ID"].get()
         name_value = self.input_fields["Name"].get()
         phone_value = self.input_fields["Phone Number"].get()
         email_value = self.input_fields["Email"].get()
         role_value = self.role_var.get()
 
-        # Validate input (e.g., ensure required fields are not empty)
         if not id_value or not name_value:
             tk.messagebox.showerror("Error", "ID and Name are required fields.")
             return
 
-        # Insert new record into the table (Treeview widget)
         if(role_value==0):
             values = [id_value, name_value, phone_value, email_value, role_value,12,12]
         else:
@@ -189,7 +137,6 @@ class DataApp:
 def main():
     root = tk.Tk()
 
-    # Set window size and position
     window_width = 1400
     window_height = 400
     screen_width = root.winfo_screenwidth()
