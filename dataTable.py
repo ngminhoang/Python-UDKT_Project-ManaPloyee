@@ -1,6 +1,7 @@
 import csv
 from models import *
 
+
 class DataTable:
     def __init__(self):
         self.data = []
@@ -14,7 +15,7 @@ class DataTable:
 
     def get_data(self):
         return self.data
-    
+
     def save_data(self):
         with open("data/data.csv", 'w', newline='') as file:
             fieldnames = self.data[0].keys() if self.data else []
