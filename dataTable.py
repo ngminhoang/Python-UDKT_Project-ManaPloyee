@@ -67,3 +67,8 @@ class DataTable:
 
             # Write new record to CSV file
             writer.writerow(new_record)
+
+    def search_row_by_id(self, id):
+        updated_data = [record for record in self.data if record.get('ID') == id]
+        self.data = updated_data
+        self.save_data()

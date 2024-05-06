@@ -23,7 +23,7 @@ class ManageEmployee:
         
 
     def searchStaffById(self, staffId: int):
-        return
+        self.__data.search_row_by_id(staffId)
         #todo
 
     def searchStaffByName(self, staffName: str):
