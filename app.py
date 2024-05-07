@@ -6,6 +6,7 @@ from controller import *
 
 class DataApp:
     def __init__(self, root):
+       
         self.root = root
         self.root.title("ManaPloyees")
 
@@ -24,7 +25,7 @@ class DataApp:
         
         self.right_frame = tk.Frame(self.root, width=right_frame_width, height=400, bg='white')
         self.right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-
+        self.show_check = "2"
         
         self.display_table()
 
@@ -72,10 +73,16 @@ class DataApp:
         self.lock_button.grid(row=len(labels) + 4, column=0, columnspan=2, pady=10)
 
         self.reset_button = tk.Button(self.left_frame, text="Reset", command=self.reset_record)
-        self.reset_button.grid(row=len(labels) + 7, column=0, columnspan=2, pady=10)
+        self.reset_button.grid(row=len(labels) + 7, column=0, columnspan=1, pady=5)
 
         self.reset_button = tk.Button(self.left_frame, text="Caculate", command=self.reset_record)
-        self.reset_button.grid(row=len(labels) + 9, column=0, columnspan=2, pady=10)
+        self.reset_button.grid(row=len(labels) + 7, column=2, columnspan=1, pady=5)
+
+        self.type_show = tk.StringVar(self.left_frame)
+        self.type_show.set("Show All")
+        show = ["Show All","Show Employee", "Show Manager"]
+        show_menu = tk.OptionMenu(self.left_frame, self.type_show, *show, command=self.on_show_change)
+        show_menu.grid(row=len(labels)+7, column=1, columnspan=1, pady=5, sticky=tk.W)
     
     def update_record(self):
         id_value = self.input_fields["ID"].get()
@@ -148,6 +155,20 @@ class DataApp:
         self.delete_button.config(state=tk.DISABLED)
         self.lock_button.config(state=tk.DISABLED)
 
+    def on_show_change(self, *args):
+        selected_role = self.type_show.get()
+
+        if selected_role == "Show Employee":
+            self.show_check = "0"
+        elif selected_role == "Show Manager":
+            self.show_check = "1"
+        else:
+            self.show_check = "2"
+
+        print(self.show_check)
+        self.reload_tree_data()
+            
+
     def on_role_change(self, *args):
         selected_role = self.role_var.get()
 
@@ -197,6 +218,7 @@ class DataApp:
         for item in self.tree.get_children():
             self.tree.delete(item)
     
+
     def reload_tree_data(self):
         self.clear_tree()
         self.data = self.controller.getData()
@@ -208,7 +230,43 @@ class DataApp:
                 record.get("Email", ""),
                 "Manager" if record.get("Role", "") == "1" else "Employee"
             ]
-            self.tree.insert("", tk.END, values=values)
+            if self.show_check=="0":
+                if values["Role"] == "Employee":
+                    self.tree.insert("", tk.END, values=values)
+            elif self.show_check=="1":
+                if values["Role"] == "Manager":
+                    self.tree.insert("", tk.END, values=values)
+            else:
+                self.tree.insert("", tk.END, values=values)
+
+    # def reload_tree_data_only_employee(self):
+    #     self.clear_tree()
+    #     self.data = self.controller.getData()
+    #     for record in self.data:
+    #         values = [
+    #             record.get("ID", ""),
+    #             record.get("Name", ""),
+    #             record.get("Phone Number", ""),
+    #             record.get("Email", ""),
+    #             "Manager" if record.get("Role", "") == "1" else "Employee"
+    #         ]
+    #         if values["Role"] == "Employee":
+    #             self.tree.insert("", tk.END, values=values)
+    
+    # def reload_tree_data_only_manager(self):
+    #     self.clear_tree()
+    #     self.data = self.controller.getData()
+    #     for record in self.data:
+    #         values = [
+    #             record.get("ID", ""),
+    #             record.get("Name", ""),
+    #             record.get("Phone Number", ""),
+    #             record.get("Email", ""),
+    #             "Manager" if record.get("Role", "") == "1" else "Employee"
+    #         ]
+    #         if values["Role"] == "Manager":
+    #             self.tree.insert("", tk.END, values=values)
+    
 
     def on_row_click(self, event):
         self.enable_button_writing()
