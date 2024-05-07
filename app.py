@@ -21,6 +21,8 @@ class DataApp:
         self.left_frame.pack(side=tk.LEFT, fill=tk.Y)
         self.right_frame = tk.Frame(self.root, width=right_frame_width, height=400, bg='white')
         self.right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.show_check = "2"
+        
         self.display_table()
         self.create_input_fields()
 
@@ -64,16 +66,56 @@ class DataApp:
         self.lock_button.grid(row=len(labels) + 4, column=0, columnspan=2, pady=10)
 
         self.reset_button = tk.Button(self.left_frame, text="Reset", command=self.reset_record)
-        self.reset_button.grid(row=len(labels) + 7, column=0, columnspan=2, pady=10)
+        self.reset_button.grid(row=len(labels) + 7, column=0, columnspan=1, pady=5)
+
+        self.reset_button = tk.Button(self.left_frame, text="Caculate", command=self.reset_record)
+        self.reset_button.grid(row=len(labels) + 7, column=2, columnspan=1, pady=5)
+
+        self.type_show = tk.StringVar(self.left_frame)
+        self.type_show.set("Show All")
+        show = ["Show All","Show Employee", "Show Manager"]
+        show_menu = tk.OptionMenu(self.left_frame, self.type_show, *show, command=self.on_show_change)
+        show_menu.grid(row=len(labels)+7, column=1, columnspan=1, pady=5, sticky=tk.W)
 
     def update_record(self):
-        print()
+        id_value = self.input_fields["ID"].get()
+        name_value = self.input_fields["Name"].get()
+        phone_value = self.input_fields["Phone Number"].get()
+        email_value = self.input_fields["Email"].get()
+        role_value = self.role_var.get()
+        revenue_value = self.input_fields["Revenue"].get()
+        working_month_value = self.input_fields["Working Month"].get()
+        total_revenue_value = self.input_fields["Total Revenue"].get()
+        manage_group_value = self.input_fields["Manage Group"].get()
+        employee_count_value = self.input_fields["Employee Count"].get()
+
+        if not id_value or not name_value:
+            tk.messagebox.showerror("Error", "ID and Name are required fields.")
+            return
+
+        if(role_value=='Manager'):
+            values = [id_value, name_value, phone_value, email_value, "Manager",total_revenue_value,manage_group_value,employee_count_value]
+            staff = create_manager_from_list(values)
+        else:
+            values = [id_value, name_value, phone_value, email_value, "Employee",revenue_value,working_month_value]
+            staff = create_employee_from_list(values)
+
+        self.controller.editStaff(id_value,staff)
+        self.reload_tree_data()
+
+
 
     def delete_record(self):
-        print()
+        id_value = self.input_fields["ID"].get()
+        self.controller.deleteStaff(id_value,True)
+        self.reload_tree_data()
+        self.reset_record()
 
     def lock_record(self):
-        print()
+        id_value = self.input_fields["ID"].get()
+        self.controller.deleteStaff(id_value,False)
+        self.reload_tree_data()
+        self.reset_record()
 
     def reset_record(self):
         self.enable_button_read()
@@ -105,6 +147,20 @@ class DataApp:
         self.update_button.config(state=tk.DISABLED)
         self.delete_button.config(state=tk.DISABLED)
         self.lock_button.config(state=tk.DISABLED)
+
+    def on_show_change(self, *args):
+        selected_role = self.type_show.get()
+
+        if selected_role == "Show Employee":
+            self.show_check = "0"
+        elif selected_role == "Show Manager":
+            self.show_check = "1"
+        else:
+            self.show_check = "2"
+
+        print(self.show_check)
+        self.reload_tree_data()
+
 
     def on_role_change(self, *args):
         selected_role = self.role_var.get()
@@ -152,10 +208,64 @@ class DataApp:
             self.tree.insert("", tk.END, values=values)
         self.tree.bind("<ButtonRelease-1>", self.on_row_click)
 
+    def clear_tree(self):
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+
+
+    def reload_tree_data(self):
+        self.clear_tree()
+        self.data = self.controller.getData()
+        for record in self.data:
+            values = [
+                record.get("ID", ""),
+                record.get("Name", ""),
+                record.get("Phone Number", ""),
+                record.get("Email", ""),
+                "Manager" if record.get("Role", "") == "1" else "Employee"
+            ]
+            if self.show_check=="0":
+                if values["Role"] == "Employee":
+                    self.tree.insert("", tk.END, values=values)
+            elif self.show_check=="1":
+                if values["Role"] == "Manager":
+                    self.tree.insert("", tk.END, values=values)
+            else:
+                self.tree.insert("", tk.END, values=values)
+
+    # def reload_tree_data_only_employee(self):
+    #     self.clear_tree()
+    #     self.data = self.controller.getData()
+    #     for record in self.data:
+    #         values = [
+    #             record.get("ID", ""),
+    #             record.get("Name", ""),
+    #             record.get("Phone Number", ""),
+    #             record.get("Email", ""),
+    #             "Manager" if record.get("Role", "") == "1" else "Employee"
+    #         ]
+    #         if values["Role"] == "Employee":
+    #             self.tree.insert("", tk.END, values=values)
+
+    # def reload_tree_data_only_manager(self):
+    #     self.clear_tree()
+    #     self.data = self.controller.getData()
+    #     for record in self.data:
+    #         values = [
+    #             record.get("ID", ""),
+    #             record.get("Name", ""),
+    #             record.get("Phone Number", ""),
+    #             record.get("Email", ""),
+    #             "Manager" if record.get("Role", "") == "1" else "Employee"
+    #         ]
+    #         if values["Role"] == "Manager":
+    #             self.tree.insert("", tk.END, values=values)
+
+
     def on_row_click(self, event):
         self.enable_button_writing()
-        item = self.tree.selection()[0]  # Get the selected item
-        values = self.tree.item(item, "values")  # Get the values of the selected item
+        item = self.tree.selection()[0]
+        values = self.tree.item(item, "values")
         print("Selected values:", values[4])
         self.input_fields["ID"].delete(0, tk.END)
         self.input_fields["ID"].insert(0, values[0])
