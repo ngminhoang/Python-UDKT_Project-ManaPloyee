@@ -25,7 +25,7 @@ def cal_salary(staff: Manager | Employee):
 def cal_income(staff: Manager | Employee):
     result = 0
     try:
-        if isinstance(staff, Manager):
+        if staff["Role"] == "1":
             result = float(staff['Total Revenue'])
         else:
             result = float(staff['Revenue'])
@@ -68,3 +68,15 @@ def get_user_by_id(user_id):
             return user
     return None
 
+
+def format_currency(number):
+    # Convert number to string and reverse it
+    number_str = str(number)[::-1]
+
+    # Split the number into groups of three digits
+    groups = [number_str[i:i + 3] for i in range(0, len(number_str), 3)]
+
+    # Join the groups with '.' separator and reverse the result
+    formatted_number = '.'.join(groups)[::-1]
+
+    return formatted_number

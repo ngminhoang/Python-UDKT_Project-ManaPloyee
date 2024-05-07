@@ -22,7 +22,7 @@ class DataApp:
         self.right_frame = tk.Frame(self.root, width=right_frame_width, height=400, bg='white')
         self.right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.show_check = "2"
-        
+
         self.display_table()
         self.create_input_fields()
 
@@ -55,11 +55,13 @@ class DataApp:
 
         role_menu = tk.OptionMenu(self.left_frame, self.role_var, *roles, command=self.on_role_change)
         role_menu.grid(row=len(labels), column=1, padx=5, pady=5, sticky=tk.W)
-        
-        self.update_button = tk.Button(self.left_frame, text="Update Record", command=self.update_record, state=tk.DISABLED)
+
+        self.update_button = tk.Button(self.left_frame, text="Update Record", command=self.update_record,
+                                       state=tk.DISABLED)
         self.update_button.grid(row=len(labels) + 2, column=0, columnspan=2, pady=10)
 
-        self.delete_button = tk.Button(self.left_frame, text="Delete Record", command=self.delete_record, state=tk.DISABLED)
+        self.delete_button = tk.Button(self.left_frame, text="Delete Record", command=self.delete_record,
+                                       state=tk.DISABLED)
         self.delete_button.grid(row=len(labels) + 3, column=0, columnspan=2, pady=10)
 
         self.lock_button = tk.Button(self.left_frame, text="Lock Record", command=self.lock_record, state=tk.DISABLED)
@@ -68,14 +70,17 @@ class DataApp:
         self.reset_button = tk.Button(self.left_frame, text="Reset", command=self.reset_record)
         self.reset_button.grid(row=len(labels) + 7, column=0, columnspan=1, pady=5)
 
-        self.reset_button = tk.Button(self.left_frame, text="Caculate", command=self.reset_record)
-        self.reset_button.grid(row=len(labels) + 7, column=2, columnspan=1, pady=5)
+        self.salary_button = tk.Button(self.left_frame, text="Salary", command=self.show_salary)
+        self.salary_button.grid(row=len(labels) + 8, column=0, columnspan=1, pady=5)
+
+        self.reset_button = tk.Button(self.left_frame, text="Income", command=self.show_income)
+        self.reset_button.grid(row=len(labels) + 8, column=1, columnspan=1, pady=5)
 
         self.type_show = tk.StringVar(self.left_frame)
         self.type_show.set("Show All")
-        show = ["Show All","Show Employee", "Show Manager"]
+        show = ["Show All", "Show Employee", "Show Manager"]
         show_menu = tk.OptionMenu(self.left_frame, self.type_show, *show, command=self.on_show_change)
-        show_menu.grid(row=len(labels)+7, column=1, columnspan=1, pady=5, sticky=tk.W)
+        show_menu.grid(row=len(labels) + 7, column=1, columnspan=1, pady=5, sticky=tk.W)
 
     def update_record(self):
         id_value = self.input_fields["ID"].get()
@@ -93,27 +98,26 @@ class DataApp:
             tk.messagebox.showerror("Error", "ID and Name are required fields.")
             return
 
-        if(role_value=='Manager'):
-            values = [id_value, name_value, phone_value, email_value, "Manager",total_revenue_value,manage_group_value,employee_count_value]
+        if (role_value == 'Manager'):
+            values = [id_value, name_value, phone_value, email_value, "Manager", total_revenue_value,
+                      manage_group_value, employee_count_value]
             staff = create_manager_from_list(values)
         else:
-            values = [id_value, name_value, phone_value, email_value, "Employee",revenue_value,working_month_value]
+            values = [id_value, name_value, phone_value, email_value, "Employee", revenue_value, working_month_value]
             staff = create_employee_from_list(values)
 
-        self.controller.editStaff(id_value,staff)
+        self.controller.editStaff(id_value, staff)
         self.reload_tree_data()
-
-
 
     def delete_record(self):
         id_value = self.input_fields["ID"].get()
-        self.controller.deleteStaff(id_value,True)
+        self.controller.deleteStaff(id_value, True)
         self.reload_tree_data()
         self.reset_record()
 
     def lock_record(self):
         id_value = self.input_fields["ID"].get()
-        self.controller.deleteStaff(id_value,False)
+        self.controller.deleteStaff(id_value, False)
         self.reload_tree_data()
         self.reset_record()
 
@@ -121,20 +125,21 @@ class DataApp:
         self.enable_button_read()
         self.role_var.set("Employee")
 
-        for field in["ID", "Name", "Phone Number", "Email", "Revenue", "Working Month", "Total Revenue", "Manage Group", "Employee Count"]:
-                self.input_fields[field].config(state=tk.NORMAL)
-                self.input_fields[field].delete(0, tk.END)
-                self.input_fields[field].insert(0, "")
+        for field in ["ID", "Name", "Phone Number", "Email", "Revenue", "Working Month", "Total Revenue",
+                      "Manage Group", "Employee Count"]:
+            self.input_fields[field].config(state=tk.NORMAL)
+            self.input_fields[field].delete(0, tk.END)
+            self.input_fields[field].insert(0, "")
 
         for field in ["Revenue", "Working Month"]:
-                self.input_fields[field].config(state=tk.NORMAL)
-                self.input_fields[field].delete(0, tk.END)
-                self.input_fields[field].insert(0, "")
+            self.input_fields[field].config(state=tk.NORMAL)
+            self.input_fields[field].delete(0, tk.END)
+            self.input_fields[field].insert(0, "")
 
         for field in ["Total Revenue", "Manage Group", "Employee Count"]:
-                self.input_fields[field].delete(0, tk.END)
-                self.input_fields[field].insert(0, "NOT USED")
-                self.input_fields[field].config(state=tk.DISABLED)
+            self.input_fields[field].delete(0, tk.END)
+            self.input_fields[field].insert(0, "NOT USED")
+            self.input_fields[field].config(state=tk.DISABLED)
 
     def enable_button_writing(self):
         self.add_button.config(state=tk.DISABLED)
@@ -161,7 +166,6 @@ class DataApp:
         print(self.show_check)
         self.reload_tree_data()
 
-
     def on_role_change(self, *args):
         selected_role = self.role_var.get()
 
@@ -187,6 +191,23 @@ class DataApp:
                 self.input_fields[field].insert(0, "NOT USED")
                 self.input_fields[field].config(state=tk.DISABLED)
 
+
+    def show_salary(self):
+        salary = self.controller.salary_employee()
+        messagebox.showinfo("Salary", f'Salary: {salary}')
+
+    def show_income(self):
+        selected_role = self.type_show.get()
+
+        if selected_role == "Show Employee":
+            check = "0"
+        elif selected_role == "Show Manager":
+            check = "1"
+        else:
+            check = "-1"
+        income = self.controller.income(check)
+        messagebox.showinfo("Income", f'Income: {income}')
+
     def display_table(self):
         self.tree = ttk.Treeview(self.right_frame, columns=("ID", "Name", "Phone Number", "Email", "Role"),
                                  show="headings")
@@ -203,7 +224,7 @@ class DataApp:
                 record.get("Name", ""),
                 record.get("Phone Number", ""),
                 record.get("Email", ""),
-                "Manager" if record.get("Role","")=="1" else "Employee"
+                "Manager" if record.get("Role", "") == "1" else "Employee"
             ]
             self.tree.insert("", tk.END, values=values)
         self.tree.bind("<ButtonRelease-1>", self.on_row_click)
@@ -211,7 +232,6 @@ class DataApp:
     def clear_tree(self):
         for item in self.tree.get_children():
             self.tree.delete(item)
-
 
     def reload_tree_data(self):
         self.clear_tree()
@@ -224,11 +244,11 @@ class DataApp:
                 record.get("Email", ""),
                 "Manager" if record.get("Role", "") == "1" else "Employee"
             ]
-            if self.show_check=="0":
-                if values["Role"] == "Employee":
+            if self.show_check == "0":
+                if values[-1] == "Employee":
                     self.tree.insert("", tk.END, values=values)
-            elif self.show_check=="1":
-                if values["Role"] == "Manager":
+            elif self.show_check == "1":
+                if values[-1] == "Manager":
                     self.tree.insert("", tk.END, values=values)
             else:
                 self.tree.insert("", tk.END, values=values)
@@ -261,10 +281,12 @@ class DataApp:
     #         if values["Role"] == "Manager":
     #             self.tree.insert("", tk.END, values=values)
 
-
     def on_row_click(self, event):
         self.enable_button_writing()
-        item = self.tree.selection()[0]
+        try:
+            item = self.tree.selection()[0]
+        except IndexError:
+            return
         values = self.tree.item(item, "values")
         print("Selected values:", values[4])
         self.input_fields["ID"].delete(0, tk.END)
@@ -275,10 +297,10 @@ class DataApp:
         self.input_fields["Phone Number"].insert(0, values[2])
         self.input_fields["Email"].delete(0, tk.END)
         self.input_fields["Email"].insert(0, values[3])
-        if values[4]=="Employee":
+        if values[4] == "Employee":
             self.role_var.set("Employee")
             for row in self.data:
-                if row["ID"] == values[0] and row["Role"] == "0" :
+                if row["ID"] == values[0] and row["Role"] == "0":
                     print(row)
                     self.input_fields["Revenue"].config(state=tk.NORMAL)
                     self.input_fields["Revenue"].delete(0, tk.END)
@@ -292,10 +314,10 @@ class DataApp:
                 self.input_fields[field].insert(0, "NOT USED")
                 self.input_fields[field].config(state=tk.DISABLED)
 
-        if values[4]=="Manager":
+        if values[4] == "Manager":
             self.role_var.set("Manager")
             for row in self.data:
-                if row["ID"] == values[0] and row["Role"] == "1" :
+                if row["ID"] == values[0] and row["Role"] == "1":
                     print(row)
                     self.input_fields["Total Revenue"].config(state=tk.NORMAL)
                     self.input_fields["Total Revenue"].delete(0, tk.END)
@@ -333,21 +355,23 @@ class DataApp:
         total_revenue_value = self.input_fields["Total Revenue"].get()
         manage_group_value = self.input_fields["Manage Group"].get()
         employee_count_value = self.input_fields["Employee Count"].get()
-        error = validate(role_value, id_value, phone_value, email_value, revenue_value, working_month_value, total_revenue_value, employee_count_value)
+        error = validate(role_value, id_value, phone_value, email_value, revenue_value, working_month_value,
+                         total_revenue_value, employee_count_value)
 
         if len(error) > 0:
             messagebox.showerror("Error", error)
             return
 
-        if(role_value=='Manager'):
-            values = [id_value, name_value, phone_value, email_value, "Manager",total_revenue_value,manage_group_value,employee_count_value]
+        if (role_value == 'Manager'):
+            values = [id_value, name_value, phone_value, email_value, "Manager", total_revenue_value,
+                      manage_group_value, employee_count_value]
             staff = create_manager_from_list(values)
         else:
-            values = [id_value, name_value, phone_value, email_value, "Employee",revenue_value,working_month_value]
+            values = [id_value, name_value, phone_value, email_value, "Employee", revenue_value, working_month_value]
             staff = create_employee_from_list(values)
 
         print(role_value)
-        self.controller.addNewStaff( staff)
+        self.controller.addNewStaff(staff)
         self.tree.insert("", tk.END, values=values)
 
 

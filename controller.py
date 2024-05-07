@@ -1,4 +1,4 @@
-from common import cal_salary, cal_income
+from common import cal_salary, cal_income, format_currency
 from models import Staff, Employee, Manager
 from dataTable import DataTable
 
@@ -40,24 +40,24 @@ class ManageEmployee:
         if staff_id is None:
             for staff in all_staff:
                 if staff['Role'] != group:
+                    print(cal_salary(staff))
                     result += cal_salary(staff)
         else:
             for staff in all_staff:
                 if staff['Role'] == staff_id:
+                    print(cal_salary(staff))
                     result += cal_salary(staff)
-        return result
+        return format_currency(int(result))
 
-    def income(self, cal_type: str = "group"):
+    def income(self, cal_type: str):
         all_staff = self.__data.get_data()
         result = 0
-        if cal_type == "group":
-            for manager in all_staff:
-                if str(manager['Role']) == "1":
-                    result += cal_income(manager)
-        else:
-            for manager in all_staff:
-                if str(manager['Role']) == "0":
-                    result += cal_income(manager)
-        return result
+        get_all = False
+        if cal_type == "-1":
+            get_all = True
+        for staff in all_staff:
+            if str(staff['Role']) != cal_type or get_all:
+                result += cal_income(staff)
+        return format_currency(int(result))
 
 
