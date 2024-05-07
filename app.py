@@ -22,6 +22,7 @@ class DataApp:
         self.right_frame = tk.Frame(self.root, width=right_frame_width, height=400, bg='white')
         self.right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.show_check = "2"
+        self.search_check = "0"
 
         self.display_table()
         self.create_input_fields()
@@ -76,11 +77,48 @@ class DataApp:
         self.reset_button = tk.Button(self.left_frame, text="Income", command=self.show_income)
         self.reset_button.grid(row=len(labels) + 8, column=1, columnspan=1, pady=5)
 
+        self.search_button = tk.Button(self.left_frame, text="Search", command=self.search)
+        self.search_button.grid(row=len(labels) + 10, column=0, columnspan=1, pady=5)
+
+        self.search_entry = tk.Entry(self.left_frame)  
+        self.search_entry.grid(row=len(labels) + 10, column=2, columnspan=1, pady=0)
+
+        self.type_search = tk.StringVar(self.left_frame)
+        self.type_search.set("ID")
+        search = ["ID", "Name"]
+        search_menu = tk.OptionMenu(self.left_frame, self.type_search, *search, command=self.on_search_change)
+        search_menu.grid(row=len(labels) + 10, column=1, columnspan=1, padx=5)
+
         self.type_show = tk.StringVar(self.left_frame)
         self.type_show.set("Show All")
         show = ["Show All", "Show Employee", "Show Manager"]
         show_menu = tk.OptionMenu(self.left_frame, self.type_show, *show, command=self.on_show_change)
         show_menu.grid(row=len(labels) + 7, column=1, columnspan=1, pady=5, sticky=tk.W)
+
+
+    def search(self):
+        value = self.search_entry.get()
+        for row in self.data:
+            if self.search_check == "0":
+                if row["ID"] == value:
+                    self.fillData(row)
+                    return
+                    
+            if self.search_check == "1":
+                if row["Name"] == value:
+                    self.fillData(row)
+                    return
+        self.reset_record()
+
+
+
+    def on_search_change(self,*args):
+        selected_search = self.type_search.get()
+        if selected_search == "ID":
+            self.search_check = "0"
+        elif selected_search == "Name":
+            self.search_check = "1"
+
 
     def update_record(self):
         id_value = self.input_fields["ID"].get()
@@ -93,7 +131,7 @@ class DataApp:
         total_revenue_value = self.input_fields["Total Revenue"].get()
         manage_group_value = self.input_fields["Manage Group"].get()
         employee_count_value = self.input_fields["Employee Count"].get()
-
+        
         if not id_value or not name_value:
             tk.messagebox.showerror("Error", "ID and Name are required fields.")
             return
@@ -253,34 +291,6 @@ class DataApp:
             else:
                 self.tree.insert("", tk.END, values=values)
 
-    # def reload_tree_data_only_employee(self):
-    #     self.clear_tree()
-    #     self.data = self.controller.getData()
-    #     for record in self.data:
-    #         values = [
-    #             record.get("ID", ""),
-    #             record.get("Name", ""),
-    #             record.get("Phone Number", ""),
-    #             record.get("Email", ""),
-    #             "Manager" if record.get("Role", "") == "1" else "Employee"
-    #         ]
-    #         if values["Role"] == "Employee":
-    #             self.tree.insert("", tk.END, values=values)
-
-    # def reload_tree_data_only_manager(self):
-    #     self.clear_tree()
-    #     self.data = self.controller.getData()
-    #     for record in self.data:
-    #         values = [
-    #             record.get("ID", ""),
-    #             record.get("Name", ""),
-    #             record.get("Phone Number", ""),
-    #             record.get("Email", ""),
-    #             "Manager" if record.get("Role", "") == "1" else "Employee"
-    #         ]
-    #         if values["Role"] == "Manager":
-    #             self.tree.insert("", tk.END, values=values)
-
     def on_row_click(self, event):
         self.enable_button_writing()
         try:
@@ -335,6 +345,49 @@ class DataApp:
                 self.input_fields[field].config(state=tk.DISABLED)
 
         # if(values[4]==)
+    def fillData(self, values):
+        
+        self.input_fields["ID"].delete(0, tk.END)
+        self.input_fields["ID"].insert(0, values["ID"])
+        self.input_fields["Name"].delete(0, tk.END)
+        self.input_fields["Name"].insert(0, values["Name"])
+        self.input_fields["Phone Number"].delete(0, tk.END)
+        self.input_fields["Phone Number"].insert(0, values["Phone Number"])
+        self.input_fields["Email"].delete(0, tk.END)
+        self.input_fields["Email"].insert(0, values["Email"])
+        if values["Role"] == "0":
+            self.role_var.set("Employee")
+            self.input_fields["Revenue"].config(state=tk.NORMAL)
+            self.input_fields["Revenue"].delete(0, tk.END)
+            self.input_fields["Revenue"].insert(0, values["Revenue"])
+            self.input_fields["Working Month"].config(state=tk.NORMAL)
+            self.input_fields["Working Month"].delete(0, tk.END)
+            self.input_fields["Working Month"].insert(0, values["Working Month Count"])
+
+            for field in ["Total Revenue", "Manage Group", "Employee Count"]:
+                self.input_fields[field].delete(0, tk.END)
+                self.input_fields[field].insert(0, "NOT USED")
+                self.input_fields[field].config(state=tk.DISABLED)
+            
+
+        if values["Role"] == "1":
+            self.role_var.set("Manager")
+            self.input_fields["Total Revenue"].config(state=tk.NORMAL)
+            self.input_fields["Total Revenue"].delete(0, tk.END)
+            self.input_fields["Total Revenue"].insert(0, values["Total Revenue"])
+            self.input_fields["Manage Group"].config(state=tk.NORMAL)
+            self.input_fields["Manage Group"].delete(0, tk.END)
+            self.input_fields["Manage Group"].insert(0, values["Manage Group"])
+            self.input_fields["Employee Count"].config(state=tk.NORMAL)
+            self.input_fields["Employee Count"].delete(0, tk.END)
+            self.input_fields["Employee Count"].insert(0, values["Employee Count"])
+
+            for field in ["Revenue", "Working Month"]:
+                self.input_fields[field].delete(0, tk.END)
+                self.input_fields[field].insert(0, "NOT USED")
+                self.input_fields[field].config(state=tk.DISABLED)
+            
+        
 
     def sort_by_column(self, header):
         items = list(self.tree.get_children(""))
@@ -379,7 +432,7 @@ def main():
     root = tk.Tk()
 
     window_width = 1400
-    window_height = 600
+    window_height = 700
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     x = (screen_width - window_width) // 2
