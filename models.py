@@ -59,6 +59,6 @@ def create_manager_from_list(values):
     Expected order of values: [id, name, phone_number, email, role]
     """
 
-    id_value, name_value, phone_value, email_value, role_value, total_ren, manage_group, empl_count = values
-    manager = Manager(id_value, name_value, phone_value, email_value, total_ren, manage_group, empl_count)
-    return manager
+    id_value, name_value, phone_value, email_value, role_value, total_revenue, manage_group, employee_count = values
+    employee = Manager(id_value, name_value, phone_value, email_value, manage_group, employee_count, total_revenue)
+    return employee
