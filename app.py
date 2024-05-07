@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 
 from common import validate
 from dataTable import DataTable
@@ -225,7 +226,7 @@ class DataApp:
         error = validate(role_value, id_value, phone_value, email_value, revenue_value, working_month_value, total_revenue_value, employee_count_value)
 
         if len(error) > 0:
-            tk.messagebox.showerror("Error", error)
+            messagebox.showerror("Error", error)
             return
 
         if(role_value=='Manager'):
