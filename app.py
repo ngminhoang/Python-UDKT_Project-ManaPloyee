@@ -34,9 +34,9 @@ class DataApp:
 
         for idx, label_text in enumerate(labels):
             label = tk.Label(self.left_frame, text=label_text + ":", anchor=tk.E, padx=5)
-            label.grid(row=idx, column=0, sticky=tk.E)
+            label.grid(row=idx+1, column=0, sticky=tk.E)
             entry = tk.Entry(self.left_frame)
-            entry.grid(row=idx, column=1, padx=5, pady=5, sticky=tk.W)
+            entry.grid(row=idx+1, column=1, padx=5, pady=5, sticky=tk.W)
             self.input_fields[label_text] = entry
 
         for field in ["Total Revenue", "Manage Group", "Employee Count"]:
@@ -45,55 +45,55 @@ class DataApp:
             self.input_fields[field].config(state=tk.DISABLED)
 
         role_label = tk.Label(self.left_frame, text="Role:", anchor=tk.E, padx=5)
-        role_label.grid(row=len(labels), column=0, sticky=tk.E)
+        role_label.grid(row=len(labels) + 1, column=0, sticky=tk.E)
 
         self.role_var = tk.StringVar(self.left_frame)
         self.role_var.set("Employee")
         roles = ["Employee", "Manager"]
 
         self.add_button = tk.Button(self.left_frame, text="Add Record", command=self.add_record)
-        self.add_button.grid(row=len(labels) + 1, column=0, columnspan=2, pady=10)
+        self.add_button.grid(row=len(labels) + 1 + 1, column=0, columnspan=2, pady=10)
 
         role_menu = tk.OptionMenu(self.left_frame, self.role_var, *roles, command=self.on_role_change)
-        role_menu.grid(row=len(labels), column=1, padx=5, pady=5, sticky=tk.W)
+        role_menu.grid(row=len(labels) + 1, column=1, padx=5, pady=5, sticky=tk.W)
 
         self.update_button = tk.Button(self.left_frame, text="Update Record", command=self.update_record,
                                        state=tk.DISABLED)
-        self.update_button.grid(row=len(labels) + 2, column=0, columnspan=2, pady=10)
+        self.update_button.grid(row=len(labels) + 1 + 2, column=0, columnspan=2, pady=10)
 
         self.delete_button = tk.Button(self.left_frame, text="Delete Record", command=self.delete_record,
                                        state=tk.DISABLED)
-        self.delete_button.grid(row=len(labels) + 3, column=0, columnspan=2, pady=10)
+        self.delete_button.grid(row=len(labels) + 1 + 3, column=0, columnspan=2, pady=10)
 
         self.lock_button = tk.Button(self.left_frame, text="Lock Record", command=self.lock_record, state=tk.DISABLED)
-        self.lock_button.grid(row=len(labels) + 4, column=0, columnspan=2, pady=10)
+        self.lock_button.grid(row=len(labels) + 1 + 4, column=0, columnspan=2, pady=10)
 
         self.reset_button = tk.Button(self.left_frame, text="Reset", command=self.reset_record)
-        self.reset_button.grid(row=len(labels) + 7, column=0, columnspan=1, pady=5)
+        self.reset_button.grid(row=len(labels) + 1 + 7, column=0, columnspan=1, pady=5)
 
         self.salary_button = tk.Button(self.left_frame, text="Salary", command=self.show_salary)
-        self.salary_button.grid(row=len(labels) + 8, column=0, columnspan=1, pady=5)
+        self.salary_button.grid(row=len(labels) + 1 + 8, column=0, columnspan=1, pady=5)
 
         self.reset_button = tk.Button(self.left_frame, text="Income", command=self.show_income)
-        self.reset_button.grid(row=len(labels) + 8, column=1, columnspan=1, pady=5)
+        self.reset_button.grid(row=len(labels) + 1 + 8, column=1, columnspan=1, pady=5)
 
         self.search_button = tk.Button(self.left_frame, text="Search", command=self.search)
-        self.search_button.grid(row=len(labels) + 10, column=0, columnspan=1, pady=5)
+        self.search_button.grid(row=0, column=0, columnspan=1, pady=5)
 
         self.search_entry = tk.Entry(self.left_frame)  
-        self.search_entry.grid(row=len(labels) + 10, column=2, columnspan=1, pady=0)
+        self.search_entry.grid(row=0, column=2, columnspan=1, pady=0)
 
         self.type_search = tk.StringVar(self.left_frame)
         self.type_search.set("ID")
         search = ["ID", "Name"]
         search_menu = tk.OptionMenu(self.left_frame, self.type_search, *search, command=self.on_search_change)
-        search_menu.grid(row=len(labels) + 10, column=1, columnspan=1, padx=5)
+        search_menu.grid(row=0, column=1, columnspan=1, padx=5)
 
         self.type_show = tk.StringVar(self.left_frame)
         self.type_show.set("Show All")
         show = ["Show All", "Show Employee", "Show Manager"]
         show_menu = tk.OptionMenu(self.left_frame, self.type_show, *show, command=self.on_show_change)
-        show_menu.grid(row=len(labels) + 7, column=1, columnspan=1, pady=5, sticky=tk.W)
+        show_menu.grid(row=len(labels) + 1 + 7, column=1, columnspan=1, pady=5, sticky=tk.W)
 
 
     def search(self):
